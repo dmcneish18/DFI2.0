@@ -1,0 +1,151 @@
+---
+title: "Dynamic Fit Index Cutoffs"
+author: "Created by Daniel McNeish and Melissa G Wolf"
+date: "`r Sys.Date()`"
+output:  pdf_document
+
+params:
+  data: NA
+  name: NA
+  Scale: NA
+  Reps: NA
+  Factors: NA
+  est: NA
+  Miss: NA
+  missing: NA
+  PD: 0
+  fit: NA
+  cutoffs: NA
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### Basic Information
+
+**Dataset:** `r  paste(params$name)`
+
+**Sample Size:** `r  paste(nrow(data()))`
+
+**Missing Data Indicator:** `r paste(params$missing)`
+
+```{r include=F}
+scale<-NA
+
+if (params$Scale == "N"){
+  scale<-paste("Continuous (Normal)")
+  }
+  if (params$Scale == "NN"){
+   scale<-paste("Continuous (Non-Normal)")
+  }
+  if (params$Scale == "L"){
+   scale<-paste("Ordinal/Likert Treated as Continuous")
+  }
+  if (params$Scale == "C"){
+   scale<-paste("Categorical")
+  }
+```
+
+**Response Scale:** `r scale`
+
+
+**Estimator:** `r params$est`
+
+```{r include=FALSE}
+
+  precision<-NA  
+
+  if (params$Reps == 50){
+  precision<-paste("Rough")
+  }
+  
+  if (params$Reps == 100){
+  precision<-paste("2-Decimal Point")
+  }
+  
+  if (params$Reps == 250){
+  precision<-paste("3-Decimal Point")
+  }
+
+if (params$Reps == 10){
+  precision<-paste("Developer Test")
+  }
+
+```
+**Cutoff Precision:** `r precision`
+
+```{r include=FALSE}
+method<-NA
+
+if (params$Miss == "DD"){
+  method<-paste("Direct Discrepancy")
+}
+
+if (params$Miss == "OP"){
+  method<-paste("Omitted Paths")
+}
+```
+
+**DFI Misspecification Method:** `r method`
+
+### Path Diagram of Your Model:
+
+```{r}
+plot(params$PD)
+```
+
+### Your Model Fit Indices:
+
+```{r, results='asis'}
+kable(params$fit)
+```
+
+### Your DFI Cutoffs:
+
+```{r, results='asis'}
+kable(params$cutoffs)
+```
+
+### Citation Recommendations:
+
+**To cite this software:**
+
+Wolf, M.G. & McNeish, D. (2024). dynamic: DFI cutoffs for latent variables models
+(version 2.0.0). [Software]. www.dynamicfit.app.
+
+Wolf, M.G. & McNeish, D. (2023). dynamic: An R package for deriving dynamic fit index cutoffs for factor analysis. Multivariate Behavioral Research, 58 (1), 189-194.
+
+**To cite the method:**
+
+```{r, echo=FALSE, results='asis'}
+ref1<-"McNeish, D. & Wolf, M.G. (2023). Dynamic fit index cutoffs for confirmatory factor analysis models. Psychological Methods, 28 (1), 61-88."
+ref2<-NULL
+ref3<-NULL
+ref4<-NULL
+ref5<-NULL
+
+if (params$Miss == "DD"){
+ref2<-"McNeish, D. & Wolf, M.G. (in press). Direct discrepancy dynamic fit index cutoffs for arbitrary covariance structure models.  Structural Equation Modeling."
+}
+
+if (params$Scale == "C"){
+ref3<-"McNeish, D. (2023). Dynamic fit index cutoffs for factor analysis with Likert-type, ordinal, or binary responses. American Psychologist, 79 (9), 1061-1075."
+}
+
+if (params$Scale == "L"){
+ref4<-"McNeish, D. (in press). Dynamic fit index cutoffs for treating Likert items as continuous. Psychological Methods."
+}
+
+if (params$Factors==1){
+ref5<-"McNeish, D. & Wolf, M.G. (2023). Dynamic fit cutoffs for one-factor models. Behavior Research Methods, 55 (3), 1157-1174."
+}
+
+ref<-list(ref1,ref2,ref3,ref4,ref5)
+
+ref<-ref[!unlist(lapply(ref, is.null))]
+
+cat(unlist(ref), sep="\n\n")
+
+```
