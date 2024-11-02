@@ -2,7 +2,8 @@
 title: "Dynamic Fit Index Cutoffs"
 author: "Created by Daniel McNeish and Melissa G Wolf"
 date: "`r Sys.Date()`"
-output:  pdf_document
+output:  html_document:
+    df_print: paged
 
 params:
   data: NA
