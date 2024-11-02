@@ -16,8 +16,6 @@ library(rmarkdown)
 library(knitr)
 
 
-packages()
-
 ######################## Shiny Code
 
 ## Code for Interface
